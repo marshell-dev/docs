@@ -38,8 +38,8 @@
     ]
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/marshell.dev.png",
+    "dark": "/logo/marshell.dev.png"
   },
   "navbar": {
     "primary": {
