@@ -1,97 +1,63 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "chifu"
+description: "Сканер безопасности для ваших сайтов и поддоменов: запускает recon и vuln-инструменты в один клик и собирает результат в единую оценку риска."
 ---
 
-## Setting up
+chifu — это сервис, который сканирует ваши веб-приложения на уязвимости.
+Вы добавляете домен в дашборд, подтверждаете владение, запускаете
+сканирование, а chifu параллельно прогоняет десяток специализированных
+инструментов (порт-скан, краулер, fuzzing, проверка TLS, поиск
+известных уязвимостей и многое другое) и сводит всё в:
 
-Get your documentation site up and running in minutes.
+- **Risk score 1..99** с раскладкой по 5 направлениям.
+- **Список находок** с severity, инструментом, URL и доказательствами.
+- **Recon-снимок** цели — обнаруженные технологии, открытые порты,
+  формы, поддомены, CDN/WAF.
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+## Что вы можете делать в дашборде
 
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Сканировать" icon="radar" href="/dashboard/scans">
+    Запустить полный двухфазный pipeline в один клик. Видите прогресс в
+    реальном времени, на странице скана — score, finding'и, recon и
+    сырые выводы каждого инструмента.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Управлять доменами" icon="globe" href="/dashboard/domains">
+    Добавлять домены и поддомены, подтверждать владение через DNS TXT
+    или загружаемый файл. Только верифицированные домены можно
+    сканировать.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Обходить firewall" icon="shield-halved" href="/dashboard/firewall-bypass">
+    Per-domain секрет, который chifu отправляет в каждом запросе, чтобы
+    ваш Vercel / Cloudflare WAF пропускал сканер по Custom Rule.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Планировать сканы" icon="calendar-clock" href="/dashboard/schedule">
+    Раз в день / неделю / месяц — кладёте блок на календарь, и chifu
+    сам запускает скан в указанное время.
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## Как читать результат
 
-Everything you need to create world-class documentation.
+<CardGroup cols={2}>
+  <Card title="Pipeline" icon="diagram-project" href="/concepts/pipeline">
+    Почему скан проходит в два этапа и почему некоторые инструменты
+    пропускаются — это не баг, а намеренное поведение.
+  </Card>
+  <Card title="Tools" icon="screwdriver-wrench" href="/concepts/tools">
+    Что именно делают nuclei, sqlmap, dalfox, nmap и остальные.
+  </Card>
+  <Card title="Risk score" icon="gauge-high" href="/concepts/risk-score">
+    Как считается итоговая оценка, что такое band/confidence и зачем
+    нужны дельты между сканами.
+  </Card>
+  <Card title="Findings" icon="bug" href="/concepts/findings">
+    Категории находок, severity и как фильтровать их в дашборде.
+  </Card>
+</CardGroup>
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+## Начать
 
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
+<Card title="Quickstart за 5 минут" icon="rocket" href="/quickstart">
+  Регистрация → подтверждение домена → первый скан.
 </Card>

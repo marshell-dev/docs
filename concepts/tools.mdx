@@ -1,0 +1,126 @@
+---
+title: "Инструменты"
+description: "Список инструментов, которые chifu запускает за вас, и что каждый из них делает."
+---
+
+Когда вы нажимаете **Scan**, chifu параллельно запускает следующий
+набор инструментов. Они разделены на два этапа — **recon** (разведка,
+запускается всегда) и **vuln** (проверка уязвимостей, запускается с
+учётом recon).
+
+На странице скана внизу есть блок **Tools** с сырым выводом каждого —
+полезно для аудита и для понимания, почему чего-то нет в финальных
+finding'ах.
+
+## Recon
+
+<ResponseField name="probe">
+  Базовая HTTP-проверка доступности. Запускается первой; если цель не
+  отвечает — chifu не тратит время на остальные инструменты и сразу
+  завершает скан.
+</ResponseField>
+
+<ResponseField name="chifu-crawler">
+  Собственный HTML/HTTP краулер. За 90 секунд проходит до 300 страниц на
+  глубину 3, извлекает:
+  - URL и URL с параметрами,
+  - HTML-формы с полями (для дальнейшей проверки SQLi/XSS),
+  - подсказки о стеке (Next.js, WordPress, Laravel и т.п.) с уровнем
+    уверенности,
+  - эндпоинты, упомянутые в JavaScript (`/api/v1/...`).
+</ResponseField>
+
+<ResponseField name="httpx">
+  Лёгкая проверка от ProjectDiscovery: статус-коды, заголовки, title
+  страницы, обнаружение технологий, следование редиректам.
+</ResponseField>
+
+<ResponseField name="nmap">
+  Сканирует TOP-1000 TCP-портов, определяет сервисы и версии.
+  **Пропускается, если сайт за CDN** — сканировать порты Cloudflare/Vercel
+  бесполезно, это не ваш сервер.
+</ResponseField>
+
+<ResponseField name="katana">
+  Дополнительный краулер на сложных server-rendered сайтах (PHP с
+  глубокими маршрутами). **Пропускается на современных SPA** —
+  `chifu-crawler` уже их покрывает.
+</ResponseField>
+
+<ResponseField name="subfinder">
+  Ищет поддомены через публичные источники (crt.sh, VirusTotal и др.).
+  **Пропускается на static SPA** — для single-URL сканов поддомены
+  ничего не дают.
+</ResponseField>
+
+<ResponseField name="whatweb">
+  Fingerprint технологий и CMS. Дополняет результат краулера.
+</ResponseField>
+
+<ResponseField name="wafw00f">
+  Определяет, какой WAF стоит перед сайтом. **Пропускается на static SPA** —
+  тип CDN/WAF уже виден по заголовкам ответа.
+</ResponseField>
+
+<ResponseField name="ffuf">
+  Брут-форс коротких высокоценных путей: `admin`, `login`,
+  `phpmyadmin`, `wp-login.php`, `.git/config`, `.env`, `backup.zip`,
+  `swagger.json`, `.well-known/security.txt` и ещё около пятидесяти.
+  **Пропускается на static SPA** — список заточен под legacy-стеки.
+</ResponseField>
+
+## Vuln
+
+<ResponseField name="nuclei">
+  Прогоняет тысячи community-шаблонов проверки уязвимостей (CVE,
+  misconfig, exposure) на топ-50 целей, собранных recon-этапом:
+  главный URL + URL с параметрами + найденные fuzzing'ом пути +
+  JS-эндпоинты. Покрывает большинство критических/высоких категорий.
+</ResponseField>
+
+<ResponseField name="sqlmap">
+  Проверяет SQL-инъекции. Запускается **прицельно** — до 3 раз на URL с
+  параметрами и до 3 раз на POST-формы. **Требует URL с параметром**.
+  **Пропускается на static SPA**: tracking-параметры (`utm_*`,
+  `?v=hash`) не имеют SQL-поверхности.
+</ResponseField>
+
+<ResponseField name="dalfox">
+  XSS-сканер на тех же URL, что и sqlmap. Без DOM-XSS (headless-режим
+  отключён, чтобы скан укладывался в разумное время) — но reflected /
+  stored XSS покрывает.
+</ResponseField>
+
+<ResponseField name="nikto">
+  Классические проверки CGI / PHP / Apache misconfig. **Пропускается на
+  современном фронтенде** — там даёт только шум.
+</ResponseField>
+
+<ResponseField name="joomscan">
+  Сканер уязвимостей Joomla. **Запускается только если recon определил
+  CMS = Joomla.**
+</ResponseField>
+
+## CVE-lookup
+
+Это не отдельный инструмент, а шаг между recon и vuln. chifu берёт
+обнаруженные технологии с версиями (например, «WordPress 6.4.2», «nginx
+1.18.0») и сверяет с базой известных уязвимостей. Источники базы:
+
+- **NVD** — National Vulnerability Database,
+- **OSV.dev** — Open Source Vulnerabilities (Google),
+- **CISA KEV** — Known Exploited Vulnerabilities catalog.
+
+База обновляется автоматически. Найденные совпадения попадают в блок
+**Known vulnerabilities** на странице скана с CVSS-оценкой и (если есть)
+кратким описанием.
+
+## Что обозначают категории
+
+| Категория | Что значит |
+|---|---|
+| `discovery` | Карта поверхности — URL, поддомены, порты |
+| `fingerprint` | Определение технологий, CMS, WAF |
+| `recon` | Внешняя информация — например, поддомены через crt.sh |
+| `vulnscan` | Активная проверка уязвимостей |
+| `diagnostic` | Технические проверки (доступность и т.п.) |
