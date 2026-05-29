@@ -19,11 +19,12 @@
         ]
       },
       {
-        "group": "Scanning",
+        "group": "Monitoring",
         "pages": [
           "scans",
-          "risk-score",
-          "findings"
+          "alerts",
+          "findings",
+          "risk-score"
         ]
       },
       {

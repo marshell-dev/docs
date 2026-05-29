@@ -1,76 +1,79 @@
 ---
-title: "How scans work"
-description: "What happens when you hit Scan, and how to read live progress."
+title: "How monitoring works"
+description: "Connect a site once; chifu keeps scanning it and surfaces anything new."
 ---
 
-A scan points chifu's engine at your **live** site and runs it through a battery of
-checks — the same kinds of probes an attacker would run, minus the damage. You don't
-install anything. You don't change your code. You just need a [verified domain](/domains).
+Monitoring is the heart of chifu. You don't run scans by hand — you connect a
+[verified domain](/domains) and chifu re-checks it **automatically on a schedule**,
+so a new CVE or a regression after a deploy gets caught within hours, not whenever
+you remember to look.
 
-## Run a scan
+Each check points chifu's engine at your **live** site and runs it through a
+battery of probes. Nothing to install, no code changes.
 
-<Steps>
-  <Step title="Open Scans → Run scan now">
-    The card on the left of the **Scans** page.
-  </Step>
-  <Step title="Pick a verified domain">
-    Only verified domains appear in the dropdown. Need one? See [Domains](/domains).
-  </Step>
-  <Step title="Click Scan">
-    The button shows **Queuing…**, then your scan appears in **Scan history** below.
-  </Step>
-</Steps>
-
-<Note>
-  Each scan counts against your monthly quota — 3 on Free, 30 on Pro, 120 on Max.
-  See [Plans](/plans).
-</Note>
-
-## Scan statuses
-
-Your scan moves through these states, and the dashboard updates **live** — no need to
-refresh.
-
-| Status | What it means |
-| --- | --- |
-| **Queued** | Accepted and waiting for a worker to pick it up. |
-| **Running** | Actively probing your site right now. |
-| **Completed** | Finished — the full report is ready. |
-| **Failed** | Something went wrong (e.g. the site was unreachable). The report shows why. |
-
-<Tip>
-  Most static Next.js sites finish in seconds. Larger or slower sites can take a few
-  minutes. You can leave the page — the scan keeps running, and history updates when
-  it lands.
-</Tip>
-
-## Scan history
-
-The **Scan history** table lists your recent scans with their target, ID, start time,
-duration, and findings count. The newest three are shown by default; expand to see the
-rest. Click any row to open its full report.
-
-## What a report contains
-
-Open a completed scan to see:
+## What chifu checks every run
 
 <CardGroup cols={2}>
-  <Card title="Risk score" icon="gauge" href="/risk-score">
-    A single 0–99 number with a color band, plus the five-part breakdown of what drove it.
-  </Card>
-  <Card title="Tech stack" icon="layer-group">
-    What chifu detected powering your site — framework, host, CDN — with versions.
-  </Card>
   <Card title="Known vulnerabilities" icon="shield-halved">
-    A table of CVEs matched to your detected versions, each linking out to NVD.
+    Detects your framework + dependency versions and matches them against
+    published CVEs — the core of "tell me when something new affects my stack."
   </Card>
-  <Card title="Findings" icon="bug" href="/findings">
-    Everything else we flagged — missing headers, exposed banners, and more.
+  <Card title="Security headers" icon="lock">
+    CSP, `X-Frame-Options`, HSTS, and friends.
+  </Card>
+  <Card title="TLS & certificates" icon="certificate">
+    Certificate validity, protocol version, cipher strength.
+  </Card>
+  <Card title="Exposure" icon="eye">
+    Leaked secrets, server banners, and info that shouldn't be public.
   </Card>
 </CardGroup>
 
-## On-demand vs. scheduled
+## Automatic vs. on-demand
 
-Free plans run scans **on demand** — you click the button. On **Pro** and **Max** you
-can also [schedule recurring scans](/schedule) so chifu re-checks your site
-automatically and catches regressions before your users do.
+- **Automatic (the default).** chifu [schedules scans for you](/schedule) at
+  load-balanced times and re-runs them on a cadence that matches your plan. This
+  is what makes it *monitoring* and not a one-off tool.
+- **On-demand.** Want a result right now — say, just after a deploy? **Scans →
+  Run scan now**, pick a verified domain, click **Scan**.
+
+<Note>
+  Every scan — automatic or manual — counts against your monthly quota (3 on Free,
+  30 on Pro, 120 on Max). See [Plans](/plans).
+</Note>
+
+## Live status
+
+Scans move through `Queued → Running → Completed` and the dashboard updates live.
+Most static sites finish in seconds; larger sites take a few minutes. You can
+leave the page — it keeps running.
+
+| Status | Meaning |
+| --- | --- |
+| **Queued** | Accepted, waiting for a worker. |
+| **Running** | Actively probing your site. |
+| **Completed** | Done — the full report is ready. |
+| **Failed** | Something went wrong (e.g. unreachable). The report says why. |
+
+## What a report contains
+
+<CardGroup cols={2}>
+  <Card title="Risk score" icon="gauge" href="/risk-score">
+    A 0–99 number with a color band, plus the five-part breakdown.
+  </Card>
+  <Card title="Known vulnerabilities" icon="shield-halved">
+    CVEs matched to your detected versions, each linking to NVD.
+  </Card>
+  <Card title="Findings" icon="bug" href="/findings">
+    Missing headers, exposed banners, and everything else — with fixes.
+  </Card>
+  <Card title="Tech stack" icon="layer-group">
+    What chifu detected powering your site, with versions.
+  </Card>
+</CardGroup>
+
+## Hear about it automatically
+
+The point of monitoring is not having to check. Wire up [alerts](/alerts) and
+chifu pings you on Discord the moment a scan finds something serious — so the
+dashboard is where you go to *fix*, not to *discover*.

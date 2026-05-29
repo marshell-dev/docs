@@ -1,0 +1,53 @@
+---
+title: "Alerts"
+description: "Get pinged the moment chifu finds something — so you never have to check the dashboard."
+---
+
+Monitoring is only useful if it reaches you. Connect an alert channel and chifu
+notifies you when a scan completes or turns up something serious — with the
+finding and its fix — so the dashboard becomes where you go to *fix*, not to
+*discover*.
+
+## Discord webhook
+
+The fastest way to get alerts today.
+
+<Steps>
+  <Step title="Create a webhook in Discord">
+    In your server: **Server Settings → Integrations → Webhooks → New Webhook**.
+    Pick the channel you want chifu to post in, then **Copy Webhook URL**.
+  </Step>
+  <Step title="Paste it into chifu">
+    Open **Settings → Discord**, paste the URL, and **Save**.
+  </Step>
+  <Step title="Send a test">
+    Hit **Send test** to confirm a message lands in your channel. Done — you're
+    wired up.
+  </Step>
+</Steps>
+
+<Note>
+  The webhook URL is a secret — anyone with it can post to your channel. Don't
+  commit it or share it. You can rotate it from Discord any time and paste the new
+  one in.
+</Note>
+
+## What triggers an alert
+
+- A **scan completes** with new findings.
+- Something **critical or high** shows up — including a **newly published CVE**
+  that now affects your detected stack.
+
+That last one is the heart of chifu: you hear about a vulnerability *because it
+just started affecting you*, not because you happened to run a scan.
+
+## Telegram
+
+A **Telegram bot is coming soon** for the same alerts without needing a Discord
+server. Want it sooner? Tell us in [Discord](https://discord.gg/pPsKMze28n).
+
+## Fix it from the alert
+
+Every alert points at a finding with a plain-English fix. To close the loop
+without copy-pasting, connect the [chifu MCP](/ai-editor) and let your AI editor
+apply the fix in your code, then re-scan to confirm.

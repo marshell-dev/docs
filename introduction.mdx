@@ -1,87 +1,84 @@
 ---
-title: "Welcome to chifu"
-description: "AI shipped your site. chifu finds what it left open — and tells you exactly how to fix it."
+title: "What is chifu?"
+description: "chifu watches your site and pings you the moment a new vulnerability lands for your stack — then helps you fix it."
 ---
 
-You vibe-coded a site on Lovable, v0, Bolt, or Cursor and shipped it to Vercel.
-It looks great. But did the AI leave a secret in your bundle? Forget a security
-header? Ship a dependency with a known CVE?
+You shipped a site with Lovable, v0, Bolt, or Cursor. It works. But new
+vulnerabilities drop every week for the stacks AI loves — Next.js, React, the
+dependencies in your `package.json`. You won't hear about them. **chifu does.**
 
-**chifu** scans your live site like an attacker would, then hands you a plain-English
-report and copy-paste fixes. No security degree required.
+chifu is **security monitoring for vibe-coded sites**. Connect your site once and
+it keeps watching: when a new CVE hits your stack, a header regresses, or
+something gets exposed, chifu tells you — in plain English, with the fix.
 
 <Frame>
   <img src="/images/hero-dark.png" alt="chifu dashboard" />
 </Frame>
 
+## How it works, in one breath
+
+<Steps>
+  <Step title="Connect your site">
+    Add and verify a domain. Takes a couple of minutes, once.
+  </Step>
+  <Step title="chifu watches it">
+    Automatic scans on a schedule — you don't run anything. It tracks your
+    stack and known vulnerabilities against it.
+  </Step>
+  <Step title="You get pinged">
+    When something new shows up, chifu alerts you on **Discord** (Telegram
+    coming soon) with what's wrong and how to fix it.
+  </Step>
+  <Step title="Fix it fast">
+    Read the plain-English fix, or let your AI editor apply it for you with the
+    [chifu MCP](/ai-editor) — no copy-pasting reports.
+  </Step>
+</Steps>
+
 ## Start here
 
 <CardGroup cols={2}>
   <Card title="Quickstart" icon="rocket" href="/quickstart">
-    Go from sign-up to your first scan in under five minutes.
+    From sign-up to a monitored site in under five minutes.
   </Card>
-  <Card title="How scans work" icon="magnifying-glass" href="/scans">
-    What chifu checks, how long it takes, and how to read live progress.
+  <Card title="Get alerts" icon="bell" href="/alerts">
+    Pipe new findings to Discord so you hear about them instantly.
   </Card>
-  <Card title="Your risk score" icon="gauge" href="/risk-score">
-    The 0–99 gauge and the five things that move it.
+  <Card title="Fix from your editor" icon="robot" href="/ai-editor">
+    Let Cursor or Claude pull findings and fix them in your code.
   </Card>
-  <Card title="Findings & fixes" icon="bug" href="/findings">
-    Severities, statuses, and how to triage what we find.
+  <Card title="How monitoring works" icon="radar" href="/scans">
+    What chifu checks, how often, and how to read the results.
   </Card>
 </CardGroup>
 
-## What chifu checks
-
-Every scan runs a battery of checks against your live site — no agent to install,
-nothing to configure in your code.
+## What chifu watches for
 
 <CardGroup cols={2}>
-  <Card title="Known vulnerabilities" icon="shield-halved">
-    Detects your framework and dependencies (Next.js, React, Vercel, Cloudflare…)
-    and matches them against known CVEs.
+  <Card title="New known vulnerabilities" icon="shield-halved">
+    Detects your framework and dependency versions and flags the moment a
+    published CVE affects them.
   </Card>
-  <Card title="Security headers" icon="lock">
-    Checks for missing `Content-Security-Policy`, `X-Frame-Options`, HSTS,
-    and friends — the headers AI tools love to forget.
+  <Card title="Missing security headers" icon="lock">
+    `Content-Security-Policy`, `X-Frame-Options`, HSTS — the headers AI
+    scaffolding skips.
   </Card>
   <Card title="TLS & certificates" icon="certificate">
-    Verifies your HTTPS certificate, protocol version, and cipher strength.
+    Certificate validity, protocol version, cipher strength.
   </Card>
   <Card title="Exposure & leaks" icon="eye">
-    Looks for exposed secrets, server banners, and information leaks that
-    shouldn't be public.
+    Exposed secrets, server banners, and info that shouldn't be public.
   </Card>
 </CardGroup>
 
 ## Who it's for
 
 chifu is built for **vibe-coders** — people who ship real products with AI tools
-but never learned application security. If you can read English, you can read a
-chifu report. Every finding comes with:
-
-- A **plain-English explanation** of what's wrong and why it matters.
-- A **fix** you can paste straight into your editor or AI assistant.
-- A **severity** so you know what to fix first (and what can wait).
+but never learned application security. If you can read English, you can act on a
+chifu alert. No dashboards to babysit, no security degree required.
 
 <Note>
-  chifu is the scanning product in the **Marshell** family. Your dashboard lives at
-  [marshell.dev/dashboard](https://marshell.dev/dashboard).
+  chifu is the monitoring product in the **Marshell** family. Your dashboard is at
+  [marshell.dev/dashboard](https://marshell.dev/dashboard). Start free — 3 scans a
+  month, no credit card.
 </Note>
-
-## Next steps
-
-<CardGroup cols={2}>
-  <Card title="Add & verify a domain" icon="globe" href="/domains">
-    Prove you own a site before you scan it.
-  </Card>
-  <Card title="Plans & pricing" icon="credit-card" href="/plans">
-    Start free with 3 scans a month. No credit card.
-  </Card>
-  <Card title="Schedule scans" icon="calendar" href="/schedule">
-    Automate recurring sweeps so you never ship a regression.
-  </Card>
-  <Card title="Join the community" icon="discord" href="https://discord.gg/pPsKMze28n">
-    Tips, builds, and bonus scans on our Discord.
-  </Card>
-</CardGroup>
