@@ -1,50 +1,61 @@
 ---
 title: "API keys"
-description: "Programmatic access without opening the dashboard."
+description: "Your one-time key, and how to drive scans programmatically."
 ---
 
-API keys live on **Settings → API & Webhooks**.
+Most people never touch the API — the dashboard does everything. But if you want to
+trigger scans from CI, a script, or your own tooling, chifu speaks a small REST API
+authenticated with an API key.
 
-## The first key
+## Your one-time key
 
-Issued automatically on signup. Shown **once**, in an amber banner at
-the top of the dashboard:
+Right after you sign up, chifu shows your API key **once**, as a banner on the
+dashboard. This is the only time the full key is displayed.
 
-> Copy your key now — it won't be shown again.
+<Warning>
+  Copy it immediately and store it somewhere safe (a password manager or your CI
+  secrets). chifu only keeps a hash — if you lose it, you can't recover it, you'd need a
+  new one.
+</Warning>
 
-chifu stores only a bcrypt hash; lost keys cannot be recovered. The
-banner expires after 5 minutes.
+If you only use the dashboard, you can ignore the key entirely.
 
-## Issue another
+## Authenticating
 
-1. **Settings → API & Webhooks**.
-2. Optional **Name** (e.g. `CI / production`).
-3. Click **New key**.
+Send the key as a Bearer token on every request:
 
-The plaintext appears in the banner — copy it. The table row shows
-only the key prefix (`chf_k_…`) after that.
+```bash
+curl https://api.marshell.dev/api/v1/scan \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"target":"https://myapp.com"}'
+```
 
-## Rotate / revoke
+The response includes a `scanId` you can use to fetch the result:
 
-- **Copy** — copies the prefix (you can identify the key, but can't
-  use it; only the one-time banner contains the full value).
-- **Revoke** — invalidates the key immediately. Confirmation
-  required; cannot be undone.
+```bash
+curl https://api.marshell.dev/api/v1/scan/SCAN_ID \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
 
-If a key leaks, revoke it and issue a new one.
+<Note>
+  You can only scan domains you've [verified](/domains), and API scans count against
+  your monthly [quota](/plans) just like dashboard scans.
+</Note>
 
-## What a key can do
+## Endpoints
 
-A key acts on behalf of your organization with your permissions.
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `POST` | `/api/v1/scan` | Enqueue a scan for a target. Returns `{ scanId }`. |
+| `GET` | `/api/v1/scan/{scanId}` | Fetch a scan's full result. |
 
-- Scans run through a key consume the same monthly quota.
-- A key can only scan domains your org has verified.
-- A key cannot manage billing or team membership.
+## Keeping it safe
 
-## Handling
+- Never commit the key to a repo or paste it in screenshots.
+- Store it in your platform's secrets (Vercel/GitHub Actions environment variables).
+- Treat it like a password — anyone with it can run scans as you.
 
-- Store in your CI provider's secret store (GitHub Secrets, GitLab
-  CI Variables, Vercel Environment Variables).
-- Never commit keys to git, post them in Slack, or send them by
-  email.
-- One key per system — easier to rotate if something leaks.
+<Note>
+  Programmatic API access is part of the **Pro** plan. See [Plans](/plans).
+</Note>

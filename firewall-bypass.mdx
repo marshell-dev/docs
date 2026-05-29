@@ -1,79 +1,80 @@
 ---
 title: "Firewall bypass"
-description: "Let chifu through your Vercel / Cloudflare bot protection."
+description: "If your CDN's bot protection blocks the scanner, let chifu through with a secret header."
 ---
 
-When your site is fronted by Vercel BotID, Cloudflare Bot Fight,
-Akamai, or DataDome, chifu often gets served a challenge page
-instead of your site. The scan ends with a low score and `low`
-confidence.
+Hosts like **Vercel** and **Cloudflare** ship bot protection that challenges automated
+traffic. That's great against attackers — but it can also block chifu's scanner, leaving
+you with a thin or empty report.
 
-**Firewall bypass** fixes this. chifu signs each request with a
-secret header; you add a one-time rule on your CDN that whitelists
-that header.
+The fix: chifu sends a **secret header** on every scan, and you add one firewall rule
+that says "if you see this header, let it through." Attackers don't know the secret;
+chifu does.
 
-<Warning>
-  Only available on verified domains.
-</Warning>
+<Note>
+  You only need this if your scans come back suspiciously empty or blocked. Plenty of
+  sites don't need it at all. The panel only appears on **verified** domains.
+</Note>
 
-## Enable
+## Enable it
 
-1. **Domains** → expand a verified domain.
-2. Find **Firewall bypass** → click **Enable firewall bypass**.
+<Steps>
+  <Step title="Open the domain">
+    On **Domains**, expand a verified domain and find the **Firewall bypass** panel.
+  </Step>
+  <Step title="Generate a secret">
+    Click **Enable firewall bypass**. chifu creates a random secret and a header name
+    (default `x-chifu-bypass`) and attaches them to every future scan of this domain.
+  </Step>
+  <Step title="Copy the header name and value">
+    You'll need both for the next step. Use the eye icon to reveal the value.
+  </Step>
+  <Step title="Add the rule at your CDN">
+    Follow the recipe for your provider below.
+  </Step>
+</Steps>
 
-chifu generates a secret (`chf_b_…`). The header name is
-`x-chifu-bypass`. From this point, the scanner sends both with every
-request to this domain and its subdomains.
-
-## Add the CDN rule
-
-You write this rule once. The dashboard shows the exact recipe under
-each tab.
+## Provider recipes
 
 <Tabs>
   <Tab title="Vercel">
-    **Project → Settings → Firewall → Custom Rules → Create Rule**
-
-    - **IF**: Request Header `x-chifu-bypass` **Equals** `<your secret>`
-    - **THEN**: `Bypass`
-
-    The `Bypass` action skips Bot Protection, the OWASP rule set, and
-    Attack Mode in one step.
+    1. Open your project → **Firewall** → **Custom Rules** → **New Rule**.
+    2. **If**: `Request Header` → name = your header (e.g. `x-chifu-bypass`) →
+       `equals` → your secret value.
+    3. **Then**: choose **Allow** / **Bypass** so the request skips bot protection.
+    4. Save and deploy the rule.
   </Tab>
   <Tab title="Cloudflare">
-    **Security → WAF → Custom rules → Create rule**
-
-    - **Expression**: `(http.request.headers["x-chifu-bypass"][0] eq "<your secret>")`
-    - **Action**: `Skip` → all managed rules (plus Bot Fight Mode if
-      enabled).
+    1. Open your domain → **Security** → **WAF** → **Custom rules** → **Create rule**.
+    2. Use the expression editor:
+       ```
+       http.request.headers["x-chifu-bypass"][0] eq "YOUR_SECRET_VALUE"
+       ```
+    3. Set the action to **Skip** and select the protections to skip (managed rules /
+       Bot Fight Mode).
+    4. Deploy the rule.
   </Tab>
-  <Tab title="Custom">
-    On any other WAF: create an `allow` / `skip` rule for requests
-    with header `x-chifu-bypass` equal to your secret, placed
-    **before** your bot management rules.
+  <Tab title="Custom (any WAF / proxy)">
+    On whatever sits in front of your site (nginx, a load balancer, another WAF), add an
+    **allow** rule that matches requests where the header equals your secret, and let
+    those requests bypass your bot/rate-limit protection.
   </Tab>
 </Tabs>
 
+<Warning>
+  Treat the secret like a password. Anyone with it can skip your bot protection. Don't
+  commit it to a public repo or paste it in screenshots.
+</Warning>
+
 ## Manage the secret
 
-- **Copy** — copies the value.
-- **Rotate secret** — issues a new one. Update the CDN rule too,
-  otherwise the next scan will hit the challenge again.
-- **Remove** — disables bypass. chifu stops sending the header; you
-  can delete the CDN rule.
+The panel shows the bypass status as **Active** or **Off**, and lets you:
 
-## Scope
+- **Reveal / hide** the secret value.
+- **Rotate** it — generates a new secret. Remember to update your CDN rule afterward.
+- **Remove** it — turns bypass off and clears the header.
 
-The secret applies to the root domain and all its subdomains. If a
-subdomain sits behind a **different** CDN, expand that subdomain's
-card and configure bypass independently there.
-
-## When you need it
-
-Signs that bypass would help:
-
-- A finding `Anti-bot challenge intercepted` (tool: `passive`).
-- Risk score `1` with `low` confidence and an empty **Tech stack**.
-- Most tools in the scan returning 403 / 429.
-
-Enable bypass, rerun the scan.
+<Tip>
+  Rotate the secret periodically, and any time you suspect it leaked. After rotating,
+  update the value in your CDN rule so scans keep getting through.
+</Tip>

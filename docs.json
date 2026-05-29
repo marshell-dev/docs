@@ -3,8 +3,8 @@
   "theme": "mint",
   "name": "chifu",
   "colors": {
-    "primary": "#0B0A08",
-    "light": "#F5F1E8",
+    "primary": "#2DD4BF",
+    "light": "#2DD4BF",
     "dark": "#1C1B17"
   },
   "favicon": "/favicon.svg",
@@ -14,11 +14,12 @@
         "group": "Get started",
         "pages": [
           "introduction",
-          "quickstart"
+          "quickstart",
+          "mcp"
         ]
       },
       {
-        "group": "How scans work",
+        "group": "Scanning",
         "pages": [
           "scans",
           "risk-score",
@@ -26,13 +27,18 @@
         ]
       },
       {
-        "group": "Dashboard",
+        "group": "Setup",
         "pages": [
           "domains",
           "firewall-bypass",
-          "schedule",
-          "api-keys",
-          "plans"
+          "schedule"
+        ]
+      },
+      {
+        "group": "Account",
+        "pages": [
+          "plans",
+          "api-keys"
         ]
       }
     ]
@@ -49,6 +55,9 @@
     }
   },
   "footer": {
-    "socials": {}
+    "socials": {
+      "discord": "https://discord.gg/pPsKMze28n",
+      "website": "https://marshell.dev"
+    }
   }
 }

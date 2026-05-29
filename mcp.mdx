@@ -1,0 +1,86 @@
+---
+title: "chifu in your AI editor (MCP)"
+description: "Scan and fix vulnerabilities without leaving Cursor or Claude — no copy-pasting reports."
+---
+
+You vibe-coded your site with an AI editor. Now let it secure the site too.
+
+chifu ships an **MCP server** that plugs straight into Claude, Cursor, and other
+AI tools. Your agent scans your site, reads the findings, **fixes them in your
+code**, and re-scans to confirm — all in one conversation. No dashboard
+tab-switching, no pasting reports.
+
+<Note>
+  This is for the technical, in-editor workflow. Prefer clicking buttons? The
+  [dashboard](https://marshell.dev/dashboard) does everything too.
+</Note>
+
+## What you get
+
+Two tools your agent can call:
+
+<CardGroup cols={2}>
+  <Card title="scan_site" icon="magnifying-glass">
+    Scans a verified domain and returns the risk score plus every finding —
+    enough detail for the agent to fix each one.
+  </Card>
+  <Card title="get_scan" icon="clock-rotate-left">
+    Pulls a previous scan's full result by ID.
+  </Card>
+</CardGroup>
+
+## Setup
+
+<Steps>
+  <Step title="Get your API key">
+    chifu shows it once at signup. Copy it — see [API keys](/api-keys).
+  </Step>
+  <Step title="Add chifu to your MCP client">
+    Drop this into your client's MCP config (`.mcp.json` for Claude Code,
+    `.cursor/mcp.json` for Cursor, or `claude_desktop_config.json`):
+
+    ```json
+    {
+      "mcpServers": {
+        "chifu": {
+          "command": "npx",
+          "args": ["-y", "chifu-mcp"],
+          "env": { "CHIFU_API_KEY": "your-key-here" }
+        }
+      }
+    }
+    ```
+  </Step>
+  <Step title="Ask your agent">
+    Restart the client so it picks up the server, then just say:
+
+    > Scan myapp.com with chifu and fix the critical findings.
+
+    The agent scans, fixes the issues in your code, and re-scans to verify the
+    score went up.
+  </Step>
+</Steps>
+
+## The fix-it loop
+
+This is the whole point — chifu hands the agent **structured findings** (what's
+wrong, where, the evidence, the CVE), and your agent does the fixing:
+
+1. **Scan** — `scan_site` returns the risk score and findings, sorted by severity.
+2. **Fix** — the agent edits your code: adds missing security headers, bumps a
+   vulnerable dependency, removes exposed data.
+3. **Verify** — re-run `scan_site` once you've redeployed; confirm the findings
+   are gone and the score climbed.
+
+<Tip>
+  Scans hit your **live** site, so deploy your fixes before re-scanning. And
+  each scan counts against your monthly [quota](/plans) — batch your fixes, then
+  verify once.
+</Tip>
+
+## Configuration
+
+| Env var | Default | Purpose |
+| --- | --- | --- |
+| `CHIFU_API_KEY` | _(required)_ | Your chifu API key. |
+| `CHIFU_API_URL` | `https://api.marshell.dev` | chifu API origin (set to `http://localhost:7331` for local dev). |

@@ -1,61 +1,91 @@
 ---
-title: "Findings"
-description: "What a finding is and how to work with them."
+title: "Findings & fixes"
+description: "Every issue chifu surfaces, how serious it is, and how to work through them."
 ---
 
-A **finding** is one issue surfaced by one tool. Findings live on two
-pages:
+A **finding** is one specific issue chifu spotted — a missing header, an exposed
+banner, a dependency with a known CVE. Each scan produces findings; the **Findings**
+page aggregates them across all your scans so you have one to-do list.
 
-- **Scan page** — split into **Known vulnerabilities** (CVEs) and
-  **Other findings**.
-- **Findings page** — every finding from every scan in your org, in
-  one searchable feed.
+## The Findings page
 
-## Fields
+Open **Findings** in the sidebar to see everything chifu has flagged for your
+domains. The table shows, per row:
 
-| Field | Notes |
-|---|---|
-| **Severity** | `critical` / `high` / `medium` / `low` / `info` |
-| **Title** | Short description, e.g. *Reflected XSS in `q` parameter*. |
-| **Tool** | Which scanner found it (`nuclei`, `sqlmap`, `passive`, …). |
-| **Type** | `sqli`, `xss`, `cve`, `misconfig`, `cms-vuln`, `exposure`, `scan-limitation`. |
-| **Target** | Domain and path where it reproduces. |
-| **Evidence** | Raw tool output proving the issue. |
-| **Status** | `open` / `fixed` / `dismissed` / `accepted`. |
+- **Severity** — how urgent it is (see below).
+- **Finding** — the title, plus its ID, any CVE, and CVSS score.
+- **Target** — which domain it's on.
+- **Tool** — which check produced it.
+- **Status** — where it stands (Open by default).
+- **Age** — how long ago it was discovered.
 
-`scan-limitation` is not a vulnerability — it flags that the scanner
-saw a challenge page instead of your site. See
-[Firewall bypass](/firewall-bypass).
+### Filtering
 
-## Filtering
+Use the **search box** to filter by title, target, ID, or tool. Toggle the
+**Critical / High / Medium / Low** chips to focus on a severity. The count on the right
+updates as you filter.
 
-On the **Findings** page:
+## Severities
 
-- Click the **Critical / High / Medium / Low** chips to filter by
-  severity. Click again to clear.
-- The search box matches title, target, scan ID, and tool name.
-- The list updates in real time as new scans complete.
+Fix from the top down. Severity reflects both how exploitable an issue is and how much
+damage it could do.
 
-## Detail panel
+<CardGroup cols={2}>
+  <Card title="Critical" icon="circle-exclamation" color="#DC2626">
+    Drop everything. Likely exploitable with serious impact.
+  </Card>
+  <Card title="High" icon="triangle-exclamation" color="#DC2626">
+    Fix this week. Real risk worth prioritizing.
+  </Card>
+  <Card title="Medium" icon="circle-info" color="#EAB308">
+    Worth addressing, but not on fire.
+  </Card>
+  <Card title="Low" icon="circle-check" color="#2DD4BF">
+    Hardening and hygiene. Nice to clean up.
+  </Card>
+</CardGroup>
 
-Click a row to open the panel:
-
-- **Activity** — history and status changes.
-- **Evidence** — raw request/response or payload from the tool.
-- **Steps** — numbered reproduction steps when the tool provides them.
-- **Notes** — internal comments.
-- Right column: severity, status, CVSS, CVE/CWE, tool, target,
-  description, recommendation.
+Some passive checks also produce **Info** findings — observations with no direct risk
+(like a missing `security.txt`).
 
 ## Statuses
 
-| Status | Use it when |
-|---|---|
-| `open` | New, being worked on. |
-| `fixed` | Patched in code or config. |
-| `dismissed` | False positive. |
-| `accepted` | Known risk you've chosen not to fix. |
+Each finding carries a status so you can track your progress:
 
-Status is keyed to the finding's signature (tool + type + target +
-title). If the same issue reappears in a later scan, your status
-carries over.
+| Status | Meaning |
+| --- | --- |
+| **Open** | Newly found and not yet handled. |
+| **Fixed** | You resolved it. |
+| **Dismissed** | Not relevant to you. |
+| **Accepted** | A known, accepted risk. |
+
+## Known vulnerabilities (CVEs)
+
+When chifu matches your detected stack to a published CVE, it shows up in the **Known
+vulnerabilities** table on the scan report, with the CVE ID, severity, affected version
+range, and a link to the official NVD entry. These are usually the highest-impact items
+and the fastest wins — bumping a dependency version often clears several at once.
+
+## Working through findings
+
+<Steps>
+  <Step title="Sort by severity">
+    Start with Critical and High. The dashboard already ranks them first.
+  </Step>
+  <Step title="Read the plain-English explanation">
+    Each finding explains what's wrong and why it matters — no jargon required.
+  </Step>
+  <Step title="Apply the fix">
+    Paste the suggested fix into your editor or your AI assistant (Cursor, v0, Lovable)
+    and ship it.
+  </Step>
+  <Step title="Re-scan to confirm">
+    Run the scan again. Fixed items drop your risk and show up as a green delta on the
+    [risk score](/risk-score).
+  </Step>
+</Steps>
+
+<Note>
+  Findings update **live** — if a scan finishes while you're on the page, new findings
+  appear without a refresh.
+</Note>

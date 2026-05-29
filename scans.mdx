@@ -1,62 +1,76 @@
 ---
 title: "How scans work"
-description: "Two phases, a dozen tools, and explicit skip reasons."
+description: "What happens when you hit Scan, and how to read live progress."
 ---
 
-A scan runs in two phases. The second phase only fires the tools that
-make sense for what the first phase found.
+A scan points chifu's engine at your **live** site and runs it through a battery of
+checks — the same kinds of probes an attacker would run, minus the damage. You don't
+install anything. You don't change your code. You just need a [verified domain](/domains).
 
-## Phase 1 — recon
+## Run a scan
 
-Always runs. chifu probes the target, then runs a crawler, port scan,
-fingerprinting, fuzzing, and a fast in-process passive check
-(headers, `robots.txt`, `.well-known/security.txt`, exposed secrets,
-anti-bot challenge detection).
+<Steps>
+  <Step title="Open Scans → Run scan now">
+    The card on the left of the **Scans** page.
+  </Step>
+  <Step title="Pick a verified domain">
+    Only verified domains appear in the dropdown. Need one? See [Domains](/domains).
+  </Step>
+  <Step title="Click Scan">
+    The button shows **Queuing…**, then your scan appears in **Scan history** below.
+  </Step>
+</Steps>
 
-If the target doesn't respond, phase 2 is skipped.
+<Note>
+  Each scan counts against your monthly quota — 3 on Free, 30 on Pro, 120 on Max.
+  See [Plans](/plans).
+</Note>
 
-## Phase 2 — vulnerability scanning
+## Scan statuses
 
-Targeted at URLs and forms surfaced by recon — not "just hit the
-homepage." Each tool has a gate; the gate is shown in the scan result
-when it skips.
+Your scan moves through these states, and the dashboard updates **live** — no need to
+refresh.
 
-| Skip reason | Means |
-|---|---|
-| `target behind CDN` | Port-scanning Cloudflare/Vercel is pointless. `nmap` skipped. |
-| `static SPA` | Modern frontend (Next.js, Nuxt, etc.) with no server-rendered backend. Legacy-stack tools skipped (`nikto`, `joomscan`, WordPress paths in `ffuf`, `sqlmap`, `dalfox`). |
-| `needs param URL` | No URL with query parameters found. `sqlmap` and `dalfox` skipped. |
-| `needs CMS = joomla` | `joomscan` only runs on Joomla. |
+| Status | What it means |
+| --- | --- |
+| **Queued** | Accepted and waiting for a worker to pick it up. |
+| **Running** | Actively probing your site right now. |
+| **Completed** | Finished — the full report is ready. |
+| **Failed** | Something went wrong (e.g. the site was unreachable). The report shows why. |
 
-## Tools
+<Tip>
+  Most static Next.js sites finish in seconds. Larger or slower sites can take a few
+  minutes. You can leave the page — the scan keeps running, and history updates when
+  it lands.
+</Tip>
 
-| Tool | Phase | What it does |
-|---|---|---|
-| `probe` | recon | HTTP reachability check. |
-| `chifu-crawler` | recon | Crawls up to 300 pages, extracts URLs, forms, tech hints, JS endpoints. |
-| `httpx` | recon | Status, headers, title, tech detection. |
-| `nmap` | recon | Top-1000 TCP ports + service versions. |
-| `katana` | recon | Backup crawler for server-rendered apps. |
-| `subfinder` | recon | Subdomain enumeration via public sources. |
-| `whatweb` | recon | Tech / CMS fingerprinting. |
-| `wafw00f` | recon | WAF detection. |
-| `ffuf` | recon | Brute-forces ~50 high-value paths (`admin`, `.env`, `swagger.json`, …). |
-| `nuclei` | vuln | Runs thousands of templates against the top 50 surfaces. |
-| `sqlmap` | vuln | SQL injection — up to 3 param URLs + 3 POST forms per scan. |
-| `dalfox` | vuln | Reflected / stored XSS on the same surfaces. |
-| `nikto` | vuln | Classic CGI / PHP / Apache misconfig checks. |
-| `joomscan` | vuln | Joomla-specific. |
+## Scan history
 
-## CVE lookup
+The **Scan history** table lists your recent scans with their target, ID, start time,
+duration, and findings count. The newest three are shown by default; expand to see the
+rest. Click any row to open its full report.
 
-Between phases, chifu matches recon's tech versions (e.g. `nginx
-1.18.0`, `WordPress 6.4.2`) against **NVD**, **OSV.dev**, and the
-**CISA KEV** catalog. Matches appear under **Known vulnerabilities**
-on the scan page.
+## What a report contains
 
-## Limits
+Open a completed scan to see:
 
-- **15 minutes** per scan, hard cap.
-- **5 tools in parallel**, max.
-- Per-tool timeouts (typically 60–600s). A timed-out tool still
-  contributes whatever it produced.
+<CardGroup cols={2}>
+  <Card title="Risk score" icon="gauge" href="/risk-score">
+    A single 0–99 number with a color band, plus the five-part breakdown of what drove it.
+  </Card>
+  <Card title="Tech stack" icon="layer-group">
+    What chifu detected powering your site — framework, host, CDN — with versions.
+  </Card>
+  <Card title="Known vulnerabilities" icon="shield-halved">
+    A table of CVEs matched to your detected versions, each linking out to NVD.
+  </Card>
+  <Card title="Findings" icon="bug" href="/findings">
+    Everything else we flagged — missing headers, exposed banners, and more.
+  </Card>
+</CardGroup>
+
+## On-demand vs. scheduled
+
+Free plans run scans **on demand** — you click the button. On **Pro** and **Max** you
+can also [schedule recurring scans](/schedule) so chifu re-checks your site
+automatically and catches regressions before your users do.

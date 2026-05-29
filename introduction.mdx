@@ -1,29 +1,87 @@
 ---
-title: "Introduction"
-description: "Scan your sites for vulnerabilities, on a schedule, from one dashboard."
+title: "Welcome to chifu"
+description: "AI shipped your site. chifu finds what it left open — and tells you exactly how to fix it."
 ---
 
-chifu runs a stack of security scanners against your sites and rolls
-the output into a single **risk score** with explainable
-**findings**. You add a domain, verify ownership, and click **Scan** —
-no scripts, no config files.
+You vibe-coded a site on Lovable, v0, Bolt, or Cursor and shipped it to Vercel.
+It looks great. But did the AI leave a secret in your bundle? Forget a security
+header? Ship a dependency with a known CVE?
 
-## What you get
+**chifu** scans your live site like an attacker would, then hands you a plain-English
+report and copy-paste fixes. No security degree required.
 
-- A risk score from 1 to 99, broken down into five components.
-- Findings with severity, evidence, and a remediation note.
-- A reconnaissance snapshot: tech stack, open ports, forms, subdomains,
-  CDN/WAF.
-- Optional scheduled scans (daily / weekly / monthly) and firewall
-  bypass for sites behind Vercel or Cloudflare bot protection.
+<Frame>
+  <img src="/images/hero-dark.png" alt="chifu dashboard" />
+</Frame>
+
+## Start here
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Go from sign-up to your first scan in under five minutes.
+  </Card>
+  <Card title="How scans work" icon="magnifying-glass" href="/scans">
+    What chifu checks, how long it takes, and how to read live progress.
+  </Card>
+  <Card title="Your risk score" icon="gauge" href="/risk-score">
+    The 0–99 gauge and the five things that move it.
+  </Card>
+  <Card title="Findings & fixes" icon="bug" href="/findings">
+    Severities, statuses, and how to triage what we find.
+  </Card>
+</CardGroup>
+
+## What chifu checks
+
+Every scan runs a battery of checks against your live site — no agent to install,
+nothing to configure in your code.
+
+<CardGroup cols={2}>
+  <Card title="Known vulnerabilities" icon="shield-halved">
+    Detects your framework and dependencies (Next.js, React, Vercel, Cloudflare…)
+    and matches them against known CVEs.
+  </Card>
+  <Card title="Security headers" icon="lock">
+    Checks for missing `Content-Security-Policy`, `X-Frame-Options`, HSTS,
+    and friends — the headers AI tools love to forget.
+  </Card>
+  <Card title="TLS & certificates" icon="certificate">
+    Verifies your HTTPS certificate, protocol version, and cipher strength.
+  </Card>
+  <Card title="Exposure & leaks" icon="eye">
+    Looks for exposed secrets, server banners, and information leaks that
+    shouldn't be public.
+  </Card>
+</CardGroup>
+
+## Who it's for
+
+chifu is built for **vibe-coders** — people who ship real products with AI tools
+but never learned application security. If you can read English, you can read a
+chifu report. Every finding comes with:
+
+- A **plain-English explanation** of what's wrong and why it matters.
+- A **fix** you can paste straight into your editor or AI assistant.
+- A **severity** so you know what to fix first (and what can wait).
+
+<Note>
+  chifu is the scanning product in the **Marshell** family. Your dashboard lives at
+  [marshell.dev/dashboard](https://marshell.dev/dashboard).
+</Note>
 
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/quickstart">
-    Sign up, verify a domain, run your first scan.
+  <Card title="Add & verify a domain" icon="globe" href="/domains">
+    Prove you own a site before you scan it.
   </Card>
-  <Card title="How scans work" icon="diagram-project" href="/scans">
-    What runs, in what order, and why some tools skip.
+  <Card title="Plans & pricing" icon="credit-card" href="/plans">
+    Start free with 3 scans a month. No credit card.
+  </Card>
+  <Card title="Schedule scans" icon="calendar" href="/schedule">
+    Automate recurring sweeps so you never ship a regression.
+  </Card>
+  <Card title="Join the community" icon="discord" href="https://discord.gg/pPsKMze28n">
+    Tips, builds, and bonus scans on our Discord.
   </Card>
 </CardGroup>

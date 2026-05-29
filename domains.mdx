@@ -1,61 +1,91 @@
 ---
 title: "Domains"
-description: "Add a domain, prove you own it, scan it."
+description: "Add a site, prove you own it, then scan it."
 ---
 
-You can only scan domains you've **verified**. Without verification,
-chifu would be a public DDoS tool.
+Before chifu scans a site, you verify that you own it. This keeps everyone honest — you
+can only scan domains you control. Manage them on the **Domains** page.
 
 ## Add a domain
 
-**Domains → Add domain**, enter a hostname (`example.com`, no scheme
-or slashes), and click **Add**. The domain shows up as **Pending**.
+Click **Add domain** and enter your hostname, like `myapp.com` or `myapp.vercel.app`.
+It appears with a **Pending** badge until you verify it.
+
+<Note>
+  Enter a bare hostname — no `https://`, no trailing path. `acme.com`, not
+  `https://acme.com/`.
+</Note>
 
 ## Verify ownership
 
-Expand the card and pick a method.
+Expand the domain card and choose a method. You only need **one**.
 
 <Tabs>
-  <Tab title="DNS TXT">
-    Add a TXT record:
-
-    | Field | Value |
-    |---|---|
-    | Host | `_chifu.{your-domain}` |
-    | Type | `TXT` |
-    | Value | `chifu-verify=…` (copy from the dashboard) |
-
-    Click **Verify** after DNS propagates (usually under a minute).
+  <Tab title="File (easiest on Vercel/Next.js)">
+    <Steps>
+      <Step title="Copy the token">
+        chifu shows a token and the target URL: `https://yourdomain.com/chifu-token.txt`.
+      </Step>
+      <Step title="Create the file">
+        Add `public/chifu-token.txt` to your project containing **only** the token — one
+        line, nothing else.
+      </Step>
+      <Step title="Redeploy">
+        Push and let Vercel (or your host) deploy. Confirm the file loads at the URL
+        above.
+      </Step>
+      <Step title="Click Verify">
+        chifu fetches the file and flips the domain to **Verified**.
+      </Step>
+    </Steps>
   </Tab>
-  <Tab title="File">
-    Serve `chifu-token.txt` with only the token inside, at
-    `https://{your-domain}/chifu-token.txt`. On Next.js / Vercel,
-    put it in `/public`. No trailing newline, no BOM.
-
-    Click **Verify**.
+  <Tab title="DNS TXT">
+    <Steps>
+      <Step title="Open your DNS provider">
+        Wherever your domain's DNS lives (Cloudflare, Namecheap, your registrar…).
+      </Step>
+      <Step title="Add a TXT record">
+        - **Host / Name:** `_chifu.yourdomain.com`
+        - **Value:** the `chifu-verify=…` string chifu shows you
+      </Step>
+      <Step title="Wait, then Verify">
+        Give DNS a minute to propagate, then click **Verify**.
+      </Step>
+    </Steps>
   </Tab>
 </Tabs>
 
-If verification fails:
-
-- **DNS**: check `dig TXT _chifu.example.com`. Some registrars append
-  the zone twice — fix the host if so.
-- **File**: confirm the URL works in an incognito tab and returns
-  plain text.
-
-## Rotate the token
-
-**Regenerate token** invalidates the current verification record. Use
-it if the old token leaked or was committed to a public repo.
+<Tip>
+  Need to start over? **Regenerate token** issues a fresh token and invalidates the old
+  one — useful if a token leaked or you're switching methods.
+</Tip>
 
 ## Subdomains
 
-A verified root unlocks **Add subdomain**. Subdomains **inherit
-verification** — you don't have to verify each one. They show
-indented under the root card.
+Once a root domain is verified, you can add subdomains under it (like
+`api.myapp.com` or `staging.myapp.com`) with **Add subdomain**. Each subdomain verifies
+the same way and can be scanned independently.
 
-## Delete
+## Verified domains unlock
 
-The trash icon on a domain card removes the domain and **all its
-scans, findings, and schedules**. There's a confirmation; the action
-is irreversible.
+A green **Verified** badge means you can now:
+
+<CardGroup cols={2}>
+  <Card title="Run scans" icon="magnifying-glass" href="/scans">
+    The domain appears in the **Run scan now** dropdown.
+  </Card>
+  <Card title="Schedule scans" icon="calendar" href="/schedule">
+    Add it to your recurring schedule (Pro and Max).
+  </Card>
+  <Card title="Bypass your firewall" icon="shield" href="/firewall-bypass">
+    Generate a secret header so bot protection doesn't block the scanner.
+  </Card>
+  <Card title="Add subdomains" icon="sitemap">
+    Bring more of your surface into scope.
+  </Card>
+</CardGroup>
+
+## Removing a domain
+
+Hover a domain row and click the **✕** to remove it. This deletes the domain (and stops
+it being scannable); your past scan history stays intact.

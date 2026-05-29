@@ -1,54 +1,65 @@
 ---
-title: "Schedule"
-description: "Recurring scans on a weekly calendar."
+title: "Scheduled scans"
+description: "Your scans run on autopilot — chifu picks the times, you pick the domain."
 ---
 
-<Warning>
-  Scheduling is a **Pro** feature. On Free, the page is read-only with
-  an upgrade overlay. See [Plans](/plans).
-</Warning>
+You don't set up cron jobs or pick times. Every account gets **automatic
+scheduled scans**: chifu spreads your plan's scans across the month and runs
+them for you, so there's always a fresh report waiting.
 
-The **Schedule** page is a 7-day × 24-hour grid. You drop blocks
-onto cells; each block is a recurring scan.
+## How it works
 
-## Add a block
+<Steps>
+  <Step title="Verify a domain">
+    As soon as you have a [verified domain](/domains), chifu starts scheduling
+    scans for it — no extra step.
+  </Step>
+  <Step title="chifu allocates your slots">
+    It places your plan's scans on **low-traffic hours**, balanced against every
+    other account so no single hour gets overloaded. Paid plans get first pick
+    of the calmest slots.
+  </Step>
+  <Step title="Scans run automatically">
+    Each one lands in your [Scan history](/scans) like a manual scan. If you've
+    set up a [Discord webhook](#get-notified), you get pinged with the result.
+  </Step>
+</Steps>
 
-Hover an empty cell to reveal a `+`. Click it — a block appears with
-your first verified domain, set to **weekly** (same weekday, same
-hour, every week).
+## What you control
 
-## Configure a block
+The **only** thing you choose is the target. On the **Schedule** page, pick a
+verified domain — and every scheduled scan switches to it. One domain, watched
+on a steady cadence.
 
-Click the block to open a popover:
+<Note>
+  Times are picked for you and stay fixed. You can't drag slots around, and
+  running a manual scan won't shift your scheduled ones.
+</Note>
 
-- **Domain** — pick from your verified domains.
-- **Run now** — triggers a scan immediately, doesn't change the
-  schedule.
-- **Pause / Resume** — temporarily disables the block without
-  deleting it.
-- **Remove** — deletes the schedule.
+## How often scans run
 
-Drag the block to a different cell to change day/hour.
+Your plan sets the cadence. chifu fits the scans to your monthly quota.
 
-## Frequency
+| Plan | Cadence | Scans / month |
+| --- | --- | --- |
+| **Free** | a few times a month | 3 |
+| **Pro** | ~1 per day | 30 |
+| **Max** | ~4 per day | 120 |
 
-You can also set explicit frequency from **Scans → Schedule scan**:
+Scheduled scans count against the same monthly quota as manual ones. If you
+burn through your quota by hand early in the month, scheduled runs pause until
+it resets — your times don't change, they just resume.
 
-| Frequency | Fires |
-|---|---|
-| Once | Once at a date + time |
-| Daily | Every day at the chosen hour |
-| Weekly | A chosen weekday + hour |
-| Monthly | A chosen day of month + hour |
+## Get notified
 
-## Quotas
+So you don't have to watch the dashboard, connect a **Discord webhook** under
+**Settings → Discord**. chifu posts every completed scan and any critical
+finding straight to your channel. See [API keys & notifications](/api-keys) for
+the gist, or just paste your webhook URL in settings.
 
-| Plan | Scans / month | Scans / day |
-|---|---|---|
-| Free | 3 | — (scheduling locked) |
-| Pro | 30 | 1 |
-| Max | 120 | 4 |
+## Inactivity
 
-When the monthly quota runs out, scheduled scans are skipped
-(`quota exhausted`) until the next month. Blocks stay on the
-calendar; they start firing again on the 1st.
+Scheduling is meant for active projects. If nobody on your account signs in for
+**over a month**, chifu pauses the account and cancels its scheduled scans to
+avoid scanning abandoned sites. Just sign back in — your schedule is restored
+automatically.

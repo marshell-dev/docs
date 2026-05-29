@@ -1,54 +1,77 @@
 ---
-title: "Risk score"
-description: "A single 1..99 number, with five components and a confidence flag."
+title: "Your risk score"
+description: "One number that tells you how exposed your site is — and the five things that move it."
 ---
 
-Every completed scan gets a **risk score** from 1 to 99 — never 0,
-never 100. A perfectly clean target asymptotes to 99; an unreachable
-one floors at 1 so the gauge always renders.
+After every scan, chifu boils everything it found into a single **risk score** from
+**0 to 99**. The gauge is color-coded so you can read it without thinking.
 
-## Bands
+## Reading the gauge
 
-| Band | Range |
-|---|---|
-| `excellent` | 90–99 |
-| `good` | 75–89 |
-| `fair` | 50–74 |
-| `poor` | 25–49 |
-| `critical` | 1–24 |
+**Higher is safer.** A high score with a green band means your site is in good shape;
+a low score with a red band means there's work to do.
 
-## Components
+| Band | Meaning |
+| --- | --- |
+| **Excellent** | Locked down. Nothing serious to act on. |
+| **Good** | Solid, with minor things worth tidying up. |
+| **Fair** | Some real gaps — worth a look this week. |
+| **Poor** | Multiple issues dragging you down. Fix soon. |
+| **Critical** | Serious exposure. Treat as urgent. |
 
-The total is a weighted sum. Each component has its own 0..100 score
-and a list of hits — click a row in **Score breakdown** to expand.
+Next to the gauge you'll see **confidence dots** (1–3). More dots means chifu had more
+signal to work with — for example, a site that returned rich responses gives a more
+confident score than one that blocked most probes.
 
-| Component | Weight | Measures |
-|---|---|---|
-| **Vulnerabilities** | **40%** | All vuln-scanner findings + CVE matches, weighted by severity. |
-| **TLS** | 15% | Certificate validity, cipher strength, protocol version, days to expiry. |
-| **Headers** | 15% | CSP, HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy. |
-| **Exposure** | 15% | `.git/`, `.env`, `phpinfo`, accessible backups, secrets in response bodies. |
-| **Posture** | 15% | WAF, bot manager, DDoS mitigation, CDN. |
+## The five components
 
-One `critical` finding can drop the total by 20+. Perfect headers and
-TLS will not rescue a target with active SQL injection.
+The **Score breakdown** splits your score into five areas. Each gets its own 0–100
+sub-score and a bar.
 
-## Confidence
+<AccordionGroup>
+  <Accordion title="Vulnerabilities" icon="shield-halved">
+    Known CVEs matched to the framework and dependency versions chifu detected on your
+    site. This is usually the biggest mover.
+  </Accordion>
+  <Accordion title="TLS" icon="certificate">
+    Your HTTPS certificate, protocol version, and cipher strength.
+  </Accordion>
+  <Accordion title="Security headers" icon="lock">
+    Response headers like `Content-Security-Policy`, `X-Frame-Options`, and HSTS — the
+    ones AI scaffolding tends to skip.
+  </Accordion>
+  <Accordion title="Exposure" icon="eye">
+    Leaked information: exposed secrets, server banners, and anything public that
+    shouldn't be.
+  </Accordion>
+  <Accordion title="Defensive posture" icon="shield">
+    How well your site pushes back — CORS policy, error handling, and similar signals.
+  </Accordion>
+</AccordionGroup>
 
-Shown next to the gauge:
+<Warning>
+  **A sub-score of 0 does not mean "zero problems."** Each sub-score is 0–100 where
+  **higher means safer**. A **Vulnerabilities: 0** means chifu found serious issues and
+  the sub-score bottomed out — check the **Known vulnerabilities** table below it. A
+  *high* number is the good one.
+</Warning>
 
-| Confidence | When |
-|---|---|
-| `high` | ≥80% of tools completed cleanly. |
-| `medium` | 50–79%. |
-| `low` | Under 50%. Score is unreliable; deltas are not rendered. |
+## What hurt each score
 
-`low` confidence usually means the target's WAF is blocking the
-scanner. See [Firewall bypass](/firewall-bypass).
+Click any component row to expand its **hit list** — the specific things that pulled
+that score down. That's your to-do list, ordered by where it'll move the needle most.
 
-## Deltas
+## Re-scans and deltas
 
-If the same domain has a prior scan with at least `medium`
-confidence, **Score breakdown** shows arrows per component (`↑ +7`,
-`↓ −12`). Hover for the reason — e.g. "certificate expires in 14
-days, was 21" or "CSP added."
+When you scan the same site again, chifu compares it to the previous run. If a
+component changed, you'll see a **delta** — a small arrow and number next to the score:
+
+- **Green ↑** — it got better since last time.
+- **Red ↓** — it got worse (e.g. a new CVE landed in a dependency).
+
+This makes it easy to spot regressions right after a deploy.
+
+<Tip>
+  Scanning after every meaningful deploy turns chifu into a safety net: scheduled scans
+  ([see Schedule](/schedule)) do this automatically on Pro and Max.
+</Tip>

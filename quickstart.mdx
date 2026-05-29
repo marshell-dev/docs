@@ -1,52 +1,82 @@
 ---
 title: "Quickstart"
-description: "First scan in under five minutes."
+description: "From sign-up to your first scan in under five minutes."
 ---
 
-<Steps>
-  <Step title="Sign up">
-    Create an account at [marshell.dev/register](https://marshell.dev/register).
+This is the whole journey: create an account, prove you own a domain, and run a scan.
+No code changes, no agent to install.
 
-    You're placed on the **Free** plan (3 scans / month) and a one-time
-    API key is shown as an amber banner on **Settings → API &
-    Webhooks**. Copy it now — chifu won't show it again.
+<Steps>
+  <Step title="Create your account">
+    Sign up at [marshell.dev/register](https://marshell.dev/register) with email and
+    password, or with **GitHub** / **Google**.
+
+    You start on the **Free** plan — 3 scans per month, no credit card. Right after
+    sign-up, chifu shows a one-time **API key** banner. Copy it if you plan to use the
+    API; you won't see it again. (You can skip it for now — the dashboard works without it.)
+
+    <Tip>
+      Don't see the dashboard right away? Check your inbox and click the confirmation
+      link first.
+    </Tip>
   </Step>
 
   <Step title="Add a domain">
-    Go to **Domains → Add domain** and enter a hostname
-    (`example.com`). Status will be **Pending** until you verify
-    ownership.
+    Open **Domains** in the sidebar, click **Add domain**, and enter your hostname —
+    for example `myapp.com` or `myapp.vercel.app`.
+
+    It shows up as **Pending** until you verify ownership in the next step.
   </Step>
 
-  <Step title="Verify ownership">
-    Expand the domain card and pick one method:
+  <Step title="Verify you own it">
+    Expand the domain and pick whichever method is easier for you:
 
     <Tabs>
-      <Tab title="DNS TXT">
-        Add a TXT record at `_chifu.{your-domain}` with the value
-        chifu shows. Click **Verify** after DNS propagates.
+      <Tab title="File (easiest on Vercel)">
+        chifu gives you a token. Create a file at `public/chifu-token.txt` containing
+        only that token, then redeploy. The file will be live at
+        `https://yourdomain.com/chifu-token.txt`.
+
+        Click **Verify**. Done.
       </Tab>
-      <Tab title="File">
-        Serve `chifu-token.txt` (containing only the token) at
-        `https://{your-domain}/chifu-token.txt`. On Next.js / Vercel,
-        place it in `/public`. Click **Verify**.
+      <Tab title="DNS TXT">
+        Add a `TXT` record to your DNS:
+
+        - **Host:** `_chifu.yourdomain.com`
+        - **Value:** the `chifu-verify=…` string chifu shows you
+
+        Wait a minute for DNS to propagate, then click **Verify**.
       </Tab>
     </Tabs>
+
+    Once it flips to **Verified** (green), you're ready to scan.
   </Step>
 
-  <Step title="Run a scan">
-    On **Scans → Run scan now**, pick the verified domain and click
-    **Scan**. The pipeline takes about 8 minutes. Status in **Scan
-    history** updates live: `Queued → Running → Completed`.
+  <Step title="Run your first scan">
+    Go to **Scans → Run scan now**, pick your verified domain, and click **Scan**.
+
+    The status updates live in **Scan history**: `Queued → Running → Completed`.
+    Most static sites finish in well under a minute.
   </Step>
 
-  <Step title="Read the result">
-    Click the scan row. You'll see:
+  <Step title="Read your report">
+    Click the completed scan to open its report:
 
-    - **Risk gauge** — score 1..99 with a color band.
-    - **Score breakdown** — the five components and what hurt them.
-    - **Tech stack**, **Known vulnerabilities**, **Other findings**.
+    - **Risk score** — a 0–99 gauge with a color band, so you know at a glance.
+    - **Score breakdown** — the five areas we check and what hurt each one.
+    - **Tech stack**, **Known vulnerabilities**, and **Other findings**.
 
-    Details: [Risk score](/risk-score), [Findings](/findings).
+    Dive deeper: [Risk score](/risk-score) · [Findings & fixes](/findings)
   </Step>
 </Steps>
+
+## What's next?
+
+<CardGroup cols={2}>
+  <Card title="Behind a Vercel/Cloudflare firewall?" icon="shield" href="/firewall-bypass">
+    Let chifu's scanner through your bot protection with a secret header.
+  </Card>
+  <Card title="Never scan manually again" icon="calendar" href="/schedule">
+    Set up recurring scans on a schedule.
+  </Card>
+</CardGroup>

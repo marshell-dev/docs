@@ -1,36 +1,70 @@
 ---
-title: "Plans"
-description: "Free, Pro, Max."
+title: "Plans & pricing"
+description: "Start free. Upgrade when you outgrow it."
 ---
 
-| | **Free** | **Pro** | **Max** |
-|---|---|---|---|
-| Price | $0 | $7.99 / mo | $23.99 / mo |
-| Scans / month | 3 | 30 | 120 |
-| Scans / day (scheduled) | — | 1 | 4 |
-| [Schedule](/schedule) | — | ✓ | ✓ |
-| Manual scans | ✓ | ✓ | ✓ |
-| [Firewall bypass](/firewall-bypass) | ✓ | ✓ | ✓ |
-| Subdomains under a verified root | ✓ | ✓ | ✓ |
-| [API keys](/api-keys) | ✓ | ✓ | ✓ |
+chifu is free to start — no credit card, 3 scans a month. Upgrade when you want more
+scans, automation, and deeper checks.
 
-## What counts as a scan
+## Compare plans
 
-One pipeline run. Manual or scheduled, succeeded or failed, dashboard
-or API key — all consume one slot. The monthly counter resets on the
-first of each month (UTC).
+<CardGroup cols={3}>
+  <Card title="Free" icon="seedling">
+    **$0 / mo**
 
-When you run out:
+    For trying it out.
+    - 3 scans / month
+    - Core security checks
+    - Headers, TLS & exposure
+    - Plain-English reports
+    - AI-ready fix prompts
+    - No credit card
+  </Card>
+  <Card title="Pro" icon="bolt">
+    **$7.99 / mo**
 
-- Manual scans return `monthly scan quota exceeded`.
-- Scheduled blocks stay on the calendar and resume next month.
+    For serious indie devs.
+    - 30 scans / month
+    - All security checks
+    - Frontend leak detection
+    - Platform-specific fixes
+    - Scheduled scans (1/day)
+    - Email & Discord alerts
+    - API access
+  </Card>
+  <Card title="Max" icon="rocket">
+    **$23.99 / mo**
 
-## Change plans
+    For shipping at full throttle.
+    - 120 scans / month
+    - Everything in Pro
+    - Scheduled scans (4/day)
+    - Team seats
+    - Custom scan depth
+    - Priority support
+  </Card>
+</CardGroup>
 
-**Billing** shows your current plan and invoice history.
+## What the quota means
+
+Every scan — manual or [scheduled](/schedule) — counts against your monthly quota. The
+**Overview** page and the **Scans remaining** card show how many you have left and when
+they reset. Quotas are per organization and reset at the start of each calendar month.
+
+| Plan | Scans / month | Roughly |
+| --- | --- | --- |
+| **Free** | 3 | a few spot checks |
+| **Pro** | 30 | ~1 per day |
+| **Max** | 120 | ~4 per day |
 
 <Note>
-  Card billing is in active development. For Pro or Max access right
-  now, email [hello@marshell.dev](mailto:hello@marshell.dev) — we'll
-  enable it manually.
+  **Pro and Max are coming soon.** Today everyone runs on the Free plan. Want early
+  access or a heads-up when paid plans go live? Ping us in
+  [Discord](https://discord.gg/pPsKMze28n) or email
+  [hello@marshell.dev](mailto:hello@marshell.dev).
 </Note>
+
+## Managing your plan
+
+Your current plan shows on **Settings → Account** and on the **Overview** page. There's
+nothing to configure on Free — you're ready to scan as soon as you verify a domain.
