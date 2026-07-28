@@ -34,6 +34,10 @@
   "navbar": {
     "links": [
       {
+        "label": "GitHub",
+        "href": "https://github.com/marshell-labs/marshell"
+      },
+      {
         "label": "Console",
         "href": "https://console.marshell.dev/login"
       },
@@ -63,7 +67,7 @@
       },
       {
         "group": "Platform",
-        "pages": ["protocol", "network", "console"]
+        "pages": ["protocol", "network", "self-host", "console"]
       },
       {
         "group": "Build",

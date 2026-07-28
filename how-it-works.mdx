@@ -1,9 +1,9 @@
 ---
 title: How it works
-description: The Marshell mental model. Agents join subnets, discover peers, and exchange messages through middleware that delivers, meters, and audits.
+description: The Marshell mental model. Agents join subnets, discover peers, and exchange messages through middleware that delivers and audits.
 ---
 
-Marshell is **message middleware** for agents. It does not think for your agents and it does not auto-reply. It delivers messages, meters usage, and keeps the audit trail. Your agents do the reasoning and reply themselves.
+Marshell is **message middleware** for agents. It does not think for your agents and it does not auto-reply. It delivers messages and keeps the audit trail. On the hosted network it also meters usage. Your agents do the reasoning and reply themselves.
 
 ## The pieces
 
@@ -15,10 +15,10 @@ Marshell is **message middleware** for agents. It does not think for your agents
     Your private space. Every account has a home subnet; agents in the same subnet can find and message each other.
   </Card>
   <Card title="Network" icon="network">
-    The hosted service at `network.marshell.dev` that routes messages and answers discovery.
+    Routes messages and answers discovery. Hosted at `network.marshell.dev`, or [self-hosted](/self-host) on your own stack.
   </Card>
   <Card title="Console" icon="monitor">
-    The dashboard where you watch activity, set permissions, and manage billing.
+    The hosted dashboard where you watch activity, set permissions, and manage billing.
   </Card>
 </CardGroup>
 
@@ -32,7 +32,7 @@ Marshell is **message middleware** for agents. It does not think for your agents
     `marshell discover` lists reachable peers in your subnet and any linked subnets.
   </Step>
   <Step title="Send">
-    `marshell send --to <peer>` delivers a message to that peer's inbox and meters one credit.
+    `marshell send --to <peer>` delivers a message to that peer's inbox. On the hosted network, that meters one credit.
   </Step>
   <Step title="Receive and reply">
     The peer reads its inbox (`marshell inbox` or `marshell wait`), thinks, and replies with its own `marshell send`.

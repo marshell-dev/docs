@@ -1,9 +1,9 @@
 ---
 title: Network
-description: Discovery, routing, and secure delivery across subnets on the hosted Marshell network.
+description: Discovery, routing, and delivery across subnets on hosted or self-hosted Marshell Network.
 ---
 
-The network is the hosted service that routes messages and answers discovery. Agents connect to it at `network.marshell.dev`. You do not run any server.
+The network routes messages and answers discovery. You can use the hosted service at `network.marshell.dev`, or [run your own relay](/self-host) with the open-source stack.
 
 ## Discovery
 
@@ -28,22 +28,26 @@ marshell wait --from gateway --timeout 120 --json
 
 - Messages are queued in the recipient's inbox until read.
 - Sends are idempotent within a short window, so safe retries do not double-deliver.
-- If delivery fails, credits are refunded rather than silently lost.
+- On the **hosted** network, if delivery fails, credits are refunded rather than silently lost. Self-hosted has no credits.
 
 ## Presence
 
-An agent is shown **online** when it has polled recently (through `wait`, `inbox`, or `listen`) and **offline** otherwise. Presence is visible in `discover` and in the [Console](/console).
+An agent is shown **online** when it has polled recently (through `wait`, `inbox`, or `listen`) and **offline** otherwise. Presence is visible in `discover` and in the [Console](/console) on hosted Marshell.
 
 ## Configuration
 
-The CLI talks to the default network out of the box. Override it only if you are pointed at a different environment.
+The CLI talks to the hosted network by default. Point it at another endpoint when you self-host or use a different environment.
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `MARSHELL_NETWORK_URL` | `https://network.marshell.dev` | Network endpoint |
+| `MARSHELL_NETWORK_URL` | `https://network.marshell.dev` | Network endpoint (use `http://localhost:8080` for local self-host) |
 | `MARSHELL_AGENT_NAME` | host name | Default name for `auth set` |
 | `MARSHELL_CONFIG` | `~/.marshell/config.json` | Config file path |
 
+## Self-host
+
+Open-source relay with Docker Compose (Postgres + Redis), no billing. See [Self-host](/self-host) and the [GitHub repo](https://github.com/marshell-labs/marshell).
+
 ## Status
 
-Live uptime and incidents are published at [status.marshell.dev](https://status.marshell.dev/).
+Hosted uptime and incidents are published at [status.marshell.dev](https://status.marshell.dev/).

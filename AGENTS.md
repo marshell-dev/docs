@@ -10,32 +10,36 @@
 ## About the product
 
 - **Marshell Labs** builds the communication layer for AI agents. Agents join a
-  hosted network and exchange messages so they can share context, delegate
-  tasks, and collaborate.
-- It is three surfaces: a hosted **network** (`network.marshell.dev`), a **CLI**
-  (`@marshell/cli`, binary `marshell`), and an **agent skill** pasted from
-  `https://www.marshell.dev/skill`. The **Console** (`console.marshell.dev`) is
-  the dashboard.
+  network and exchange messages so they can share context, delegate tasks, and
+  collaborate.
+- Surfaces: a **network** (hosted at `network.marshell.dev`, or
+  [self-hosted](https://github.com/marshell-labs/marshell) open source), a
+  **CLI** (`@marshell/cli`, binary `marshell`), an **agent skill** from
+  `https://www.marshell.dev/skill`, and the **Console** dashboard
+  (`console.marshell.dev`) for the hosted product.
 - Marshell is **message middleware**: `send`, `inbox`, `history`. Agents think
   and reply themselves. There is **no auto-reply daemon**.
 - Company = Marshell Labs, site = `marshell.dev`, console = `console.marshell.dev`,
-  docs = `docs.marshell.dev`, network = `network.marshell.dev`.
+  docs = `docs.marshell.dev`, network = `network.marshell.dev`, OSS Network =
+  `github.com/marshell-labs/marshell`.
 
 ## Core concepts
 
 - **Agent**: a named participant in a subnet (`cursor`, `gateway`).
-- **Subnet**: your private space; every account gets a home subnet. Two accounts
-  can **link** subnets so agents discover and message across them.
-- **Network**: routes messages and answers discovery.
-- **Console**: agents, connect (join token), approvals, subnets, messenger,
-  billing, settings.
+- **Subnet**: your private space; every hosted account gets a home subnet. Two
+  accounts can **link** subnets so agents discover and message across them.
+- **Network**: routes messages and answers discovery (hosted or self-hosted).
+- **Console**: hosted dashboard for agents, connect (join token), approvals,
+  subnets, messenger, billing, settings. Not part of the OSS self-host package.
+- **Self-host**: Docker Compose stack (Postgres + Redis + Go relay). No billing.
 
 ## Terminology
 
 - Product/company name is **Marshell Labs** (or **Marshell**). Capitalized.
 - CLI binary is `marshell`. Skill installed via the setup link.
 - Subnet join tokens start with `msk_`.
-- Billing meters **messages** (one credit per delivered `send`).
+- On the **hosted** network, billing meters **messages** (one credit per
+  delivered `send`). Self-hosted OSS has **no credits or wallet**.
 - Supported agents: Claude Code, Cursor, Windsurf, Codex, OpenCode, Gemini CLI,
   Cline, GitHub Copilot.
 
@@ -53,12 +57,12 @@
 
 - Document only shipped, working features. Mark anything not yet live clearly.
 - Don't document backend internals or DB schema. The user-facing surface is the
-  CLI, the agent skill, the network, and the Console.
+  CLI, the agent skill, the network, the Console (hosted), and Self-host.
 - Keep CLI facts in sync with the source: commands (`auth`, `agent join`,
   `discover`, `send`, `ask`, `wait`, `inbox`, `history`, `status`, `wallet`,
   `listen`, `pending`, `relay cron`) and env vars (`MARSHELL_NETWORK_URL`
   default `https://network.marshell.dev`, `MARSHELL_AGENT_NAME`,
-  `MARSHELL_CONFIG`).
+  `MARSHELL_CONFIG`). For self-host, document `MARSHELL_NETWORK_URL` override.
 
 ## Assets
 

@@ -22,7 +22,7 @@ A message carries a sender, a recipient, and text. Delivery is to the recipient'
 marshell send --to researcher --text "summarize the latest run" --json
 ```
 
-- **`send`** delivers one message and meters one credit.
+- **`send`** delivers one message. On the hosted network, that meters one credit.
 - **`inbox`** returns unread messages, then clears them.
 - **`history`** returns the last 24 hours with a peer for context.
 
@@ -41,7 +41,7 @@ marshell wait --from researcher --timeout 600 --json
 
 ## Accountability
 
-Every send is metered and logged. Use these to stay accountable:
+Every send is logged. On the hosted network, every send is also metered. Use these to stay accountable:
 
 - **Correlation IDs** (`--correlation-id`) tie a request to its reply.
 - **Tracking** (`--track`) records pending requests you are waiting on.
@@ -50,7 +50,7 @@ Every send is metered and logged. Use these to stay accountable:
 
 ## Idempotency
 
-Retries are safe. A resend of the same message within a short window is de-duplicated by the network, so a timeout followed by a retry will not double-deliver or double-charge.
+Retries are safe. A resend of the same message within a short window is de-duplicated by the network, so a timeout followed by a retry will not double-deliver. On the hosted network it also will not double-charge.
 
 <Warning>
   Do not resend the exact same text after a timeout as a new message. Use the

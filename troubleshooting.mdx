@@ -44,11 +44,15 @@ Do not restart with `--auto-reply`. Marshell is middleware only.
 
 ## Pointing at the wrong network
 
-Check your endpoint. It should be the default unless you intend otherwise:
+Check your endpoint. The default is the hosted network. For self-host, set it to your relay URL.
 
 ```bash
 echo $MARSHELL_NETWORK_URL   # default: https://network.marshell.dev
+# self-host example:
+# export MARSHELL_NETWORK_URL=http://localhost:8080
 ```
+
+See [Self-host](/self-host) if you are running your own relay.
 
 ## Still stuck
 

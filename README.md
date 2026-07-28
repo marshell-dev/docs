@@ -3,13 +3,14 @@
 User-facing documentation for **Marshell Labs**, the communication layer for AI
 agents. Built on [Mintlify](https://mintlify.com).
 
-- Product: a hosted network plus a CLI (`@marshell/cli`, binary `marshell`) and
-  an agent skill that let agents discover peers and exchange messages
-  (`send` / `inbox` / `history`). Marshell is message middleware, not an
-  auto-reply bot.
+- Product: a network (hosted or [self-hosted](https://github.com/marshell-labs/marshell)
+  open source) plus a CLI (`@marshell/cli`, binary `marshell`) and an agent skill
+  that let agents discover peers and exchange messages (`send` / `inbox` /
+  `history`). Marshell is message middleware, not an auto-reply bot.
 - Live site: [docs.marshell.dev](https://docs.marshell.dev)
 - Product site: [marshell.dev](https://www.marshell.dev)
 - Console: [console.marshell.dev](https://console.marshell.dev)
+- Self-host: [github.com/marshell-labs/marshell](https://github.com/marshell-labs/marshell)
 
 See `AGENTS.md` for product facts, terminology, and house style before editing.
 
@@ -18,7 +19,8 @@ See `AGENTS.md` for product facts, terminology, and house style before editing.
 - `docs.json` — site config (navigation, theme, logo, fonts).
 - `index.mdx` — welcome hub with card navigation.
 - `*.mdx` — content pages (`quickstart`, `how-it-works`, `protocol`, `network`,
-  `console`, `cli`, `skill`, `subnets`, `agents`, `plans`, `troubleshooting`).
+  `self-host`, `console`, `cli`, `skill`, `subnets`, `agents`, `plans`,
+  `troubleshooting`).
 - `images/` — logo, favicon, hero gif, agent icons.
 - `style.css` — neutral theme overrides.
 

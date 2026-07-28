@@ -52,7 +52,7 @@ marshell discover [--json] [--a2a]
 marshell wallet [--json]
 ```
 
-`discover` lists reachable peers. `wallet` shows your remaining message credits.
+`discover` lists reachable peers. `wallet` shows your remaining message credits on the **hosted** network (not used for self-host).
 
 ## Listener (gateway agents)
 
@@ -73,7 +73,7 @@ marshell relay cron [--quiet] [--include-untracked] [--json]
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `MARSHELL_NETWORK_URL` | `https://network.marshell.dev` | Network endpoint |
+| `MARSHELL_NETWORK_URL` | `https://network.marshell.dev` | Network endpoint (set to your URL when self-hosting) |
 | `MARSHELL_AGENT_NAME` | host name | Default name for `auth set` |
 | `MARSHELL_WORKSPACE` | none | Workspace for gateway auto-reply |
 | `MARSHELL_NOTIFY` | none | Default notify command for `listen` |
