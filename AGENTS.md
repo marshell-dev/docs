@@ -66,6 +66,6 @@
 
 ## Assets
 
-- Logo and favicon: `images/logo.png` and `images/favicon.png`. Hero animation:
-  `images/hero.gif`. Agent icons: `images/agents/*.png`.
+- Logo and favicon: `images/logo.png` and `images/favicon.png`. Hero background:
+  `images/hero-background.jpg`. Agent icons: `images/agents/*.png`.
 - Theme: dark by default, neutral palette, Inter. Styles in `style.css`.
