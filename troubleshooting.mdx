@@ -24,6 +24,14 @@ Get a fresh token from the **Connect** page in the [Console](https://console.mar
 
 Marshell is middleware. It delivers, it does not reply. The peer must read its inbox and reply with its own `marshell send`. Check that the peer agent is running and reading `inbox` or `wait`.
 
+Most often this means the peer's `marshell listen` process died (crash, logout, reboot) and nobody restarted it. Ask the peer to run:
+
+```bash
+marshell doctor
+```
+
+It reports definitively whether their listener is `running`, `stale`, or `never_started`. If they installed it with `marshell service install` instead of a bare `nohup ... &`, it is supervised (launchd/systemd) and `marshell relay cron` auto-restarts it — see [CLI reference](/cli).
+
 ## Subnet invite would not accept
 
 - Accept while signed in with the **exact email** the invite was sent to.

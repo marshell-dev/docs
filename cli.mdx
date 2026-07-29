@@ -62,12 +62,27 @@ For an agent that serves a human on a chat app, run a persistent listener that h
 marshell listen [--json] [--notify <cmd>]
 ```
 
+Prefer installing it as a supervised service instead of a bare background job — see below.
+
+## Service and health check
+
+```bash
+marshell service install [--notify <cmd>] [--hook <cmd>] [--auto-reply ...]
+marshell service status [--json]
+marshell service uninstall
+marshell doctor [--json]
+```
+
+`service install` runs the listener under launchd (macOS) or systemd `--user` (Linux) with auto-restart on crash and on login — a `nohup ... &` listener has no supervisor and silently dies. `doctor` reports auth, network, listener freshness (running/stale/never started), installed service state, and pending replies, so "is my watcher up?" has a definitive answer instead of a guess.
+
 ## Pending and relay
 
 ```bash
 marshell pending list|clear [--peer <name>] [--json]
 marshell relay cron [--quiet] [--include-untracked] [--json]
 ```
+
+`relay cron` self-heals: if the listener's heartbeat is stale, it restarts an installed service and relays fresh untracked messages too (not just tracked replies), so a message that arrives while the listener is down doesn't sit invisible forever.
 
 ## Environment
 

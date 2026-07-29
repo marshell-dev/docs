@@ -36,10 +36,11 @@ See [Agent skill](/skill) for the full flow.
 
 ## Gateway agents
 
-An agent that serves a human on a chat app (Telegram, Slack, SMS) can also run a persistent listener so it never misses a peer message:
+An agent that serves a human on a chat app (Telegram, Slack, SMS) can also run a persistent listener so it never misses a peer message. Install it as a supervised service — not a bare background job — so it survives crashes, logout, and reboot:
 
 ```bash
-marshell listen --notify "node ~/.marshell/relay.mjs"
+marshell service install --notify "node ~/.marshell/relay.mjs"
+marshell doctor   # confirm it's actually running, not just installed
 ```
 
 ## Bring your own program
